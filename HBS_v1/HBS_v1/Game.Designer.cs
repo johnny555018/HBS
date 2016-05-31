@@ -65,9 +65,12 @@
             this.bombImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("bombImages.ImageStream")));
             this.bombImages.TransparentColor = System.Drawing.Color.Transparent;
             this.bombImages.Images.SetKeyName(0, "fire.png");
-            this.bombImages.Images.SetKeyName(1, "bomb.png");
-            this.bombImages.Images.SetKeyName(2, "bomb.png");
-            this.bombImages.Images.SetKeyName(3, "bomb.png");
+            this.bombImages.Images.SetKeyName(1, "slice188_.png");
+            this.bombImages.Images.SetKeyName(2, "slice189_.png");
+            this.bombImages.Images.SetKeyName(3, "slice190_.png");
+            this.bombImages.Images.SetKeyName(4, "bomb.png");
+            this.bombImages.Images.SetKeyName(5, "bomb.png");
+            this.bombImages.Images.SetKeyName(6, "bomb.png");
             // 
             // timer2
             // 

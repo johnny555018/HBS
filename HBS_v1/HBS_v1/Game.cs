@@ -120,7 +120,7 @@ namespace HBS_v1
                     else
                         j = player1.Left / 40 + 1;
                     map[i, j].ImageList = bombImages;
-                    map[i, j].ImageIndex = 4;
+                    map[i, j].ImageIndex = 3;
                     player1Bombs++;
                     bombsList.Add(map[i, j]);
                 }
@@ -179,8 +179,15 @@ namespace HBS_v1
                         if (player1.Top < 440)
                         {
                             if (player1.Top % 40 == 0 &&
+                                map[i + 1, j].ImageList == bombImages)
+                                break;
+                            if (player1.Top % 40 == 0 &&
                                 map[i + 1, j].ImageList == imageList1 &&
                                 map[i + 1, j].ImageIndex >= 1)
+                                break;
+                            if (player1.Top % 40 == 0 &&
+                                player1.Left % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == bombImages)
                                 break;
                             if (player1.Top % 40 == 0 &&
                                 player1.Left % 40 >0 &&
@@ -199,8 +206,15 @@ namespace HBS_v1
                         if (player1.Left > 0)
                         {
                             if (player1.Left % 40 == 0 &&
+                                map[i, j - 1].ImageList == bombImages)
+                                break;
+                            if (player1.Left % 40 == 0 &&
                                 map[i , j-1].ImageList == imageList1 &&
                                 map[i , j-1].ImageIndex >= 1)
+                                break;
+                            if (player1.Left % 40 == 0 &&
+                                player1.Top % 40 > 0 &&
+                                map[i + 1, j - 1].ImageList == bombImages)
                                 break;
                             if (player1.Left % 40 == 0 &&
                                 player1.Top % 40 > 0 &&
@@ -219,8 +233,15 @@ namespace HBS_v1
                         if (player1.Left < 680)
                         {
                             if (player1.Left % 40 == 0 &&
+                                map[i, j + 1].ImageList == bombImages)
+                                break;
+                            if (player1.Left % 40 == 0 &&
                                 map[i, j + 1].ImageList == imageList1 &&
                                 map[i, j + 1].ImageIndex >= 1)
+                                break;
+                            if (player1.Left % 40 == 0 &&
+                                player1.Top % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == bombImages)
                                 break;
                             if (player1.Left % 40 == 0 &&
                                 player1.Top % 40 > 0 &&
@@ -378,8 +399,8 @@ namespace HBS_v1
                //再跑一次迴圈，把較先放的炸彈但是被炸到的也爆炸
                for (int i = 0; i < bombsList.Count; i++)
                {
-                   if (bombsList[i].ImageIndex > 0 && bombsList[i].ImageList == bombImages)
-                       bombsList[i].ImageIndex--;
+               //    if (bombsList[i].ImageIndex > 0 && bombsList[i].ImageList == bombImages)
+                //       bombsList[i].ImageIndex--;
                    if (bombsList[i].ImageIndex == 0)//加入炸彈爆炸發生的事
                    {
                        player1Bombs--;  //已放炸彈減少
