@@ -21,6 +21,18 @@ namespace HBS_v1
         List<Label>bombsList = new List<Label>();
         List<Label>fireList = new List<Label>();
         Label[,] map = new Label[12, 18];
+        int[, ,] gameMaps = new int[,,] {{{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
+                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }}};
         public Game()
         {
             InitializeComponent();
@@ -54,7 +66,18 @@ namespace HBS_v1
             map[5, 5].ImageIndex = 1;
             map[5, 7].ImageIndex = 2;
 
+            setMap(0);
+        }
 
+        private void setMap(int stage)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                for (int j = 0; j < 18; j++)
+                {
+                    map[i, j].ImageIndex = gameMaps[stage, i, j];
+                }
+            }
         }
 
         private void Game_KeyDown(object sender, KeyEventArgs e)
