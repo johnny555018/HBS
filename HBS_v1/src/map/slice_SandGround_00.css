@@ -1,0 +1,5 @@
+.SandGround {
+	border-style: solid;
+	border-width: 40px 39px 0px 40px;
+	border-image: url(slice_SandGround_00.png) 40 39 0 40 fill stretch;
+}

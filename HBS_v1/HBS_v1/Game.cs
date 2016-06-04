@@ -12,14 +12,26 @@ namespace HBS_v1
 {
     public partial class Game : Form
     {
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(Keys vKey);
+        //player1
         private int player1Speed = 10;
         private int player1BombsMax = 5;
         private int player1Bombs = 0;
         private int player1Power = 5;
         List<int> player1Keys = new List<int>();
+        //player2
+        private int player2Speed = 10;
+        private int player2BombsMax = 5;
+        private int player2Bombs = 0;
+        private int player2Power = 5;
         List<int> player2Keys = new List<int>();
-        List<Label>bombsList = new List<Label>();
+
+        List<Label>bombsList = new List<Label>();   //for player1
+        List<Label> bombsList2 = new List<Label>(); //for player2
         List<Label>fireList = new List<Label>();
+        
         Label[,] map = new Label[12, 18];
         int[, ,] gameMaps = new int[,,] {{{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
                                           { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
@@ -33,22 +45,29 @@ namespace HBS_v1
                                           { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
                                           { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
                                           { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }}};
-        public Game()
+        public Game(int players, bool monster)
         {
             InitializeComponent();
-            
+            if (players == 2)   //set player 2
+            {
+                player2.Top = 100;
+                player2.Left = 100;
+                player2.ImageList = player2MoveDown;
+                player2.ImageIndex = 0;
+                player2.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         private void Game_Load(object sender, EventArgs e)
         {
             player1.BackColor = System.Drawing.Color.Transparent;
-           // pictureBox1.BackColor = System.Drawing.Color.Transparent;
             timer1.Interval = 33;
             timer1.Enabled = true;
-            player1.ImageList = imageList1;
+            player1.ImageList = player1MoveUp;
             player1.Left = 0;
             player1.Top = 0;
-            player1.ImageIndex = 3;
+            player1.ImageIndex = 6;
+          //  player1.AutoSize = true;
             for (int i = 0; i < 12; i++)
             {
                 for (int j = 0; j < 18; j++)
@@ -60,13 +79,13 @@ namespace HBS_v1
                     map[i, j].Left = 40 * j;
                     map[i, j].ImageList = imageList1;
                     map[i, j].ImageIndex = 0;
+                 //   map[i, j].BackColor = System.Drawing.Color.Transparent;
                     this.Controls.Add(map[i, j]);
                 }
             }
-            map[5, 5].ImageIndex = 1;
-            map[5, 7].ImageIndex = 2;
 
             setMap(0);
+            
         }
 
         private void setMap(int stage)
@@ -106,24 +125,71 @@ namespace HBS_v1
                     }
                 }
             }
-            if (e.KeyCode == Keys.Space)
+            //player2 move
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
             {
-                if (player1Bombs < player1BombsMax) //還可以放炸彈
+                if (player2Keys.Count == 0)
                 {
-                    int i, j;
-                    if (player1.Top % 40 < 20)
-                        i = player1.Top / 40;
-                    else
-                        i = player1.Top / 40 + 1;
-                    if (player1.Left % 40 < 20)
-                        j = player1.Left / 40;
-                    else
-                        j = player1.Left / 40 + 1;
-                    map[i, j].ImageList = bombImages;
-                    map[i, j].ImageIndex = 3;
-                    player1Bombs++;
-                    bombsList.Add(map[i, j]);
+                    player2Keys.Add(keyValue);
                 }
+                else
+                {
+                    bool flag = true;
+                    foreach (int k in player2Keys)
+                    {
+                        if (k == keyValue)
+                        {
+                            flag = false;
+                        }
+                    }
+                    if (flag)
+                    {
+                        player2Keys.Add(keyValue);
+                    }
+                }
+            }
+
+            if (e.KeyCode == Keys.ShiftKey)
+            {
+                if (Convert.ToBoolean(GetAsyncKeyState(Keys.LShiftKey)))
+                {
+                    if (player1Bombs < player1BombsMax) //還可以放炸彈
+                    {
+                        int i, j;
+                        if (player1.Top % 40 < 20)
+                            i = player1.Top / 40;
+                        else
+                            i = player1.Top / 40 + 1;
+                        if (player1.Left % 40 < 20)
+                            j = player1.Left / 40;
+                        else
+                            j = player1.Left / 40 + 1;
+                        map[i, j].ImageList = bombImages;
+                        map[i, j].ImageIndex = 3;
+                        player1Bombs++;
+                        bombsList.Add(map[i, j]);
+                    }
+                }
+                if (Convert.ToBoolean(GetAsyncKeyState(Keys.RShiftKey)))
+                {
+                    if (player2Bombs < player2BombsMax) //還可以放炸彈
+                    {
+                        int i, j;
+                        if (player2.Top % 40 < 20)
+                            i = player2.Top / 40;
+                        else
+                            i = player2.Top / 40 + 1;
+                        if (player2.Left % 40 < 20)
+                            j = player2.Left / 40;
+                        else
+                            j = player2.Left / 40 + 1;
+                        map[i, j].ImageList = bombImages;
+                        map[i, j].ImageIndex = 3;
+                        player2Bombs++;
+                        bombsList2.Add(map[i, j]);
+                    }
+                }
+                
             }
 
         }
@@ -135,12 +201,16 @@ namespace HBS_v1
             {
                 player1Keys .Remove(keyValue ) ;
             }
+             if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+             {
+                 player2Keys.Remove(keyValue);
+             }
         }
 
 
         private void timer1_Tick(object sender, EventArgs e)    //移動的timer
         {
-            if (player1Keys.Count > 0)
+            if (player1Keys.Count > 0)  //player1 move
             {
                 int i, j;
                 i = player1.Top / 40;
@@ -148,7 +218,11 @@ namespace HBS_v1
                 switch (player1Keys[player1Keys.Count - 1])
                 {
                     case 87://w
-                    //    picTank1.Image = imgWUp;
+                        if (player1.ImageList != player1MoveUp)
+                            player1.ImageList = player1MoveUp;
+                        if (player1.ImageIndex % 12 == 0)
+                            player1.ImageIndex += 12;
+                        player1.ImageIndex--;
                         if (player1.Top > 0)
                         {
                             if (player1.Top % 40 == 0 && 
@@ -175,7 +249,11 @@ namespace HBS_v1
                         }
                         break;
                     case 83://s
-                    //    picTank1.Image = imgWDown;
+                        if (player1.ImageList != player1MoveDown)
+                            player1.ImageList = player1MoveDown;
+                        if (player1.ImageIndex % 12 == 0)
+                            player1.ImageIndex += 12;
+                        player1.ImageIndex--;
                         if (player1.Top < 440)
                         {
                             if (player1.Top % 40 == 0 &&
@@ -202,7 +280,11 @@ namespace HBS_v1
                         }
                         break;
                     case 65://a
-                    //    picTank1.Image = imgWLeft;
+                        if (player1.ImageList != player1MoveLeft)
+                            player1.ImageList = player1MoveLeft;
+                        if (player1.ImageIndex % 12 == 0)
+                            player1.ImageIndex += 12;
+                        player1.ImageIndex--;
                         if (player1.Left > 0)
                         {
                             if (player1.Left % 40 == 0 &&
@@ -229,7 +311,11 @@ namespace HBS_v1
                         }
                         break;
                     case 68://d
-                   //     player1.Image = imgWRight;
+                        if (player1.ImageList != player1MoveRight)
+                            player1.ImageList = player1MoveRight;
+                        if (player1.ImageIndex % 12 == 0)
+                            player1.ImageIndex += 12;
+                        player1.ImageIndex--;
                         if (player1.Left < 680)
                         {
                             if (player1.Left % 40 == 0 &&
@@ -257,6 +343,141 @@ namespace HBS_v1
                         break;
                 }
             }
+
+            if (player2Keys.Count > 0)
+            {
+                int i, j;
+                i = player2.Top / 40;
+                j = player2.Left / 40;
+                switch (player2Keys[player2Keys.Count - 1])
+                {
+                    case 38:// Up
+                        if (player2.ImageList != player2MoveUp)
+                            player2.ImageList = player2MoveUp;
+                        if (player2.ImageIndex % 12 == 0)
+                            player2.ImageIndex += 12;
+                        player2.ImageIndex--;
+                        if (player2.Top > 0)
+                        {
+                            if (player2.Top % 40 == 0 && 
+                                map[i - 1, j].ImageList == bombImages)
+                                break;
+                            if (player2.Top % 40 == 0 &&
+                                map[i-1, j].ImageList == imageList1 &&
+                                map[i-1, j].ImageIndex >= 1)
+                                break;
+                            if (player2.Top % 40 == 0 &&
+                                player2.Left % 40 > 0 &&
+                                map[i - 1, j+1].ImageList == bombImages)
+                                break;
+                            if (player2.Top % 40 == 0 &&
+                                player2.Left % 40 > 0 &&
+                                map[i - 1, j+1].ImageList == imageList1 &&
+                                map[i - 1, j+1].ImageIndex >= 1)
+                                break;
+                            player2.Top -= player2Speed;
+                        }
+                        else
+                        {
+                            player2.Top = 0;
+                        }
+                        break;
+                    case 40://down
+                        if (player2.ImageList != player2MoveDown)
+                            player2.ImageList = player2MoveDown;
+                        if (player2.ImageIndex % 12 == 0)
+                            player2.ImageIndex += 12;
+                        player2.ImageIndex--;
+                        if (player2.Top < 440)
+                        {
+                            if (player2.Top % 40 == 0 &&
+                                map[i + 1, j].ImageList == bombImages)
+                                break;
+                            if (player2.Top % 40 == 0 &&
+                                map[i + 1, j].ImageList == imageList1 &&
+                                map[i + 1, j].ImageIndex >= 1)
+                                break;
+                            if (player2.Top % 40 == 0 &&
+                                player2.Left % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == bombImages)
+                                break;
+                            if (player2.Top % 40 == 0 &&
+                                player2.Left % 40 >0 &&
+                                map[i + 1, j + 1].ImageList == imageList1 &&
+                                map[i + 1, j + 1].ImageIndex >= 1)
+                                break;
+                            player2.Top += player2Speed;
+                        }
+                        else
+                        {
+                            player2.Top = 440;
+                        }
+                        break;
+                    case 37://left
+                        if (player2.ImageList != player2MoveLeft)
+                            player2.ImageList = player2MoveLeft;
+                        if (player2.ImageIndex % 12 == 0)
+                            player2.ImageIndex += 12;
+                        player2.ImageIndex--;
+                        if (player2.Left > 0)
+                        {
+                            if (player2.Left % 40 == 0 &&
+                                map[i, j - 1].ImageList == bombImages)
+                                break;
+                            if (player2.Left % 40 == 0 &&
+                                map[i , j-1].ImageList == imageList1 &&
+                                map[i , j-1].ImageIndex >= 1)
+                                break;
+                            if (player2.Left % 40 == 0 &&
+                                player2.Top % 40 > 0 &&
+                                map[i + 1, j - 1].ImageList == bombImages)
+                                break;
+                            if (player2.Left % 40 == 0 &&
+                                player2.Top % 40 > 0 &&
+                                map[i + 1, j - 1].ImageList == imageList1 &&
+                                map[i + 1, j - 1].ImageIndex >= 1)
+                                break;
+                            player2.Left -= player1Speed;
+                        }
+                        else
+                        {
+                            player2.Left = 0;
+                        }
+                        break;
+                    case 39: //right
+                        if (player2.ImageList != player2MoveRight)
+                            player2.ImageList = player2MoveRight;
+                        if (player2.ImageIndex % 12 == 0)
+                            player2.ImageIndex += 12;
+                        player2.ImageIndex--;
+                        if (player2.Left < 680)
+                        {
+                            if (player2.Left % 40 == 0 &&
+                                map[i, j + 1].ImageList == bombImages)
+                                break;
+                            if (player2.Left % 40 == 0 &&
+                                map[i, j + 1].ImageList == imageList1 &&
+                                map[i, j + 1].ImageIndex >= 1)
+                                break;
+                            if (player2.Left % 40 == 0 &&
+                                player2.Top % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == bombImages)
+                                break;
+                            if (player2.Left % 40 == 0 &&
+                                player2.Top % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == imageList1 &&
+                                map[i + 1, j + 1].ImageIndex >= 1)
+                                break;
+                            player2.Left += player1Speed;
+                        }
+                        else
+                        {
+                            player2.Left = 680;
+                        }
+                        break;
+                }
+            }
+
             //定位player1
             int a, b;
             if (player1.Top % 40 < 20)
@@ -516,6 +737,244 @@ namespace HBS_v1
                    }
                }
                bombsList.RemoveAll(item => item.ImageIndex == 0);
+            }
+
+           if (bombsList2.Count > 0)
+           {
+               for (int i = 0; i < bombsList2.Count; i++)
+               {
+                   if (bombsList2[i].ImageIndex>0)
+                       bombsList2[i].ImageIndex--;
+                   if (bombsList2[i].ImageIndex == 0)//加入炸彈爆炸發生的事
+                   {                       
+                       //fireList.Add(bombsList[i]);
+                       int j = bombsList2[i].Top / 40;
+                       int k = bombsList2[i].Left / 40;
+                       for (int index = 1; index <= player2Power && j>=index; index++)  //上面炸開
+                       {
+                           if (map[j - index, k].ImageList == imageList1)
+                           {
+                               if (map[j - index, k].ImageIndex == 0)
+                               {
+                                   map[j - index, k].ImageList = fireImages;
+                                   map[j - index, k].ImageIndex = 0;
+                                   fireList.Add(map[j - index, k]);
+                               }
+                               else if (map[j - index, k].ImageIndex == 1)   //炸到箱子
+                               {
+                                   break;
+                               }
+                               else if (map[j - index, k].ImageIndex == 2)   //炸到牆壁
+                               {
+                                   break;
+                               }
+                           }                           
+                           else if (map[j - index, k].ImageList == bombImages &&    //炸到炸彈
+                                    map[j - index, k].ImageIndex > 0)
+                           {
+                               map[j - index, k].ImageIndex = 0;
+                           }
+                       }
+
+                       for (int index = 1; index <= player2Power && j+index<12; index++)  //下面炸開
+                       {
+                           if (map[j + index, k].ImageList == imageList1)
+                           {
+                               if (map[j + index, k].ImageIndex == 0)
+                               {
+                                   map[j + index, k].ImageList = fireImages;
+                                   map[j + index, k].ImageIndex = 0;
+                                   fireList.Add(map[j + index, k]);
+                               }
+                               else if (map[j + index, k].ImageIndex == 1)   //炸到箱子
+                               {
+                                   break;
+                               }
+                               else if (map[j + index, k].ImageIndex == 2)   //炸到牆壁
+                               {
+                                   break;
+                               }
+                           }
+                           else if (map[j + index, k].ImageList == bombImages &&    //炸到炸彈
+                                    map[j + index, k].ImageIndex > 0)
+                           {
+                               map[j + index, k].ImageIndex = 0;
+                           }
+                       }
+
+                       for (int index = 1; index <= player2Power && k >= index; index++)  //左邊炸開
+                       {
+                           if (map[j, k - index].ImageList == imageList1)
+                           {
+                               if (map[j, k - index].ImageIndex == 0)
+                               {
+                                   map[j, k - index].ImageList = fireImages;
+                                   map[j, k - index].ImageIndex = 0;
+                                   fireList.Add(map[j, k - index]);
+                               }
+                               else if (map[j, k - index].ImageIndex == 1)   //炸到箱子
+                               {
+                                   break;
+                               }
+                               else if (map[j, k - index].ImageIndex == 2)   //炸到牆壁
+                               {
+                                   break;
+                               }
+                           }
+                           else if (map[j, k - index].ImageList == bombImages &&    //炸到炸彈
+                                    map[j, k - index].ImageIndex > 0)
+                           {
+                               map[j, k - index].ImageIndex = 0;
+                           }
+                       }
+
+                       for (int index = 1; index <= player2Power && k+index<18; index++)  //右邊炸開
+                       {
+                           if (map[j, k + index].ImageList == imageList1)
+                           {
+                               if (map[j, k + index].ImageIndex == 0)
+                               {
+                                   map[j, k + index].ImageList = fireImages;
+                                   map[j, k + index].ImageIndex = 0;
+                                   fireList.Add(map[j, k + index]);
+                               }
+                               else if (map[j, k + index].ImageIndex == 1)   //炸到箱子
+                               {
+                                   break;
+                               }
+                               else if (map[j, k + index].ImageIndex == 2)   //炸到牆壁
+                               {
+                                   break;
+                               }
+                           }
+                           else if (map[j, k + index].ImageList == bombImages &&    //炸到炸彈
+                                    map[j, k + index].ImageIndex > 0)
+                           {
+                               map[j, k + index].ImageIndex = 0;
+                           }
+                       }
+                   }
+               }
+               //再跑一次迴圈，把較先放的炸彈但是被炸到的也爆炸
+               for (int i = 0; i < bombsList2.Count; i++)
+               {
+               //    if (bombsList[i].ImageIndex > 0 && bombsList[i].ImageList == bombImages)
+                //       bombsList[i].ImageIndex--;
+                   if (bombsList2[i].ImageIndex == 0)//加入炸彈爆炸發生的事
+                   {
+                       player2Bombs--;  //已放炸彈減少
+                       fireList.Add(bombsList2[i]);
+                       int j = bombsList2[i].Top / 40;
+                       int k = bombsList2[i].Left / 40;
+                       for (int index = 1; index <= player2Power && j >= index; index++)  //上面炸開
+                       {
+                           if (map[j - index, k].ImageList == imageList1)
+                           {
+                               if (map[j - index, k].ImageIndex == 0)
+                               {
+                                   map[j - index, k].ImageList = fireImages;
+                                   map[j - index, k].ImageIndex = 0;
+                                   fireList.Add(map[j - index, k]);
+                               }
+                               else if (map[j - index, k].ImageIndex == 1)   //炸到箱子
+                               {
+                                   map[j - index, k].ImageIndex = 0;    //加入道具掉落
+                                   break;
+                               }
+                               else if (map[j - index, k].ImageIndex == 2)   //炸到牆壁
+                               {
+                                   break;
+                               }
+                           }
+                           else if (map[j - index, k].ImageList == bombImages &&    //炸到炸彈
+                                    map[j - index, k].ImageIndex > 0)
+                           {
+                               map[j - index, k].ImageIndex = 0;
+                           }
+                       }
+                       for (int index = 1; index <= player2Power && j + index < 12; index++)  //下面炸開
+                       {
+                           if (map[j + index, k].ImageList == imageList1)
+                           {
+                               if (map[j + index, k].ImageIndex == 0)
+                               {
+                                   map[j + index, k].ImageList = fireImages;
+                                   map[j + index, k].ImageIndex = 0;
+                                   fireList.Add(map[j + index, k]);
+                               }
+                               else if (map[j + index, k].ImageIndex == 1)   //炸到箱子
+                               {
+                                   map[j + index, k].ImageIndex = 0;    //加入道具掉落
+                                   break;
+                               }
+                               else if (map[j + index, k].ImageIndex == 2)   //炸到牆壁
+                               {
+                                   break;
+                               }
+                           }
+                           else if (map[j + index, k].ImageList == bombImages &&    //炸到炸彈
+                                    map[j + index, k].ImageIndex > 0)
+                           {
+                               map[j + index, k].ImageIndex = 0;
+                           }
+                       }
+
+                       for (int index = 1; index <= player2Power && k >= index; index++)  //左邊炸開
+                       {
+                           if (map[j, k - index].ImageList == imageList1)
+                           {
+                               if (map[j, k - index].ImageIndex == 0)
+                               {
+                                   map[j, k - index].ImageList = fireImages;
+                                   map[j, k - index].ImageIndex = 0;
+                                   fireList.Add(map[j, k - index]);
+                               }
+                               else if (map[j, k - index].ImageIndex == 1)   //炸到箱子
+                               {
+                                   map[j, k - index].ImageIndex = 0;    //加入道具掉落
+                                   break;
+                               }
+                               else if (map[j, k - index].ImageIndex == 2)   //炸到牆壁
+                               {
+                                   break;
+                               }
+                           }
+                           else if (map[j, k - index].ImageList == bombImages &&    //炸到炸彈
+                                    map[j, k - index].ImageIndex > 0)
+                           {
+                               map[j, k - index].ImageIndex = 0;
+                           }
+                       }
+
+                       for (int index = 1; index <= player2Power && k + index < 18; index++)  //右邊炸開
+                       {
+                           if (map[j, k + index].ImageList == imageList1)
+                           {
+                               if (map[j, k + index].ImageIndex == 0)
+                               {
+                                   map[j, k + index].ImageList = fireImages;
+                                   map[j, k + index].ImageIndex = 0;
+                                   fireList.Add(map[j, k + index]);
+                               }
+                               else if (map[j, k + index].ImageIndex == 1)   //炸到箱子
+                               {
+                                   map[j, k + index].ImageIndex = 0;    //加入道具掉落
+                                   break;
+                               }
+                               else if (map[j, k + index].ImageIndex == 2)   //炸到牆壁
+                               {
+                                   break;
+                               }
+                           }      
+                           else if (map[j, k + index].ImageList == bombImages &&    //炸到炸彈
+                                    map[j, k + index].ImageIndex > 0)
+                           {
+                               map[j, k + index].ImageIndex = 0;
+                           }
+                       }
+                   }
+               }
+               bombsList2.RemoveAll(item => item.ImageIndex == 0);
             }
 
        }

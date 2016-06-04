@@ -1,0 +1,1 @@
+Gift3_01.png.png 3 2, Gift3_02.png.png 45 2, Gift3_03.png.png 87 2.

@@ -16,7 +16,7 @@ namespace HBS_v1
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Game());
+            Application.Run(new Game(2,false));
         }
     }
 }
