@@ -47,7 +47,7 @@ namespace HBS_v1
                                           { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
                                           { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }}};
                                           */
-        int[,,] gameMaps = new int[15,18,1];
+        int[,] gameMaps = new int[12, 18];
 
         public Game(int players, bool monster, int mapnumber)
         {
@@ -60,24 +60,21 @@ namespace HBS_v1
                 player2.ImageIndex = 0;
                 player2.BackColor = System.Drawing.Color.Transparent;
             }
-            string mapname = "E:\\新增資料夾\\Downloads\\HBS-master(1)\\HBS-master\\HBS_v1\\src\\maps\\" + mapnumber + ".txt";
-            if (File.Exists(@mapname))
+            string mapname = string.Format(@"{0}", "..\\..\\" + mapnumber + ".txt");
+            using (TextReader reader = File.OpenText(mapname))
             {
-                string[] lines = File.ReadAllLines(@mapname);
-                int a, b, c;
-                c = 0;
-                for (a = 0; a < 15; a++) {
-                    for (b = 0; b < 18; b++) {
-                        gameMaps[a, b, 1] = Int32.Parse(lines[c]);
-                        c++;
+                string text;
+                string[] bits;
+                for (int a = 0; a < 12; a++)
+                {
+                    text = reader.ReadLine();
+                    bits = text.Split(' ');
+                    for (int b = 0; b < 18; b++)
+                    {
+                        gameMaps[a, b] = int.Parse(bits[b]);
                     }
                 }
             }
-            else {
-                MessageBox.Show("找不到地圖,請確認地圖檔是否正常儲存", "(づ′・ω・）づ", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Environment.Exit(System.Environment.ExitCode);
-            }
-
 
         }
 
@@ -107,7 +104,15 @@ namespace HBS_v1
                 }
             }
 
-            setMap(0);
+            for (int i = 0; i < 12; i++)
+            {
+                for (int j = 0; j < 18; j++)
+                {
+                    map[i, j].ImageIndex = gameMaps[i, j];
+                }
+            }
+
+          //  setMap(0);
             
         }
 
@@ -117,7 +122,7 @@ namespace HBS_v1
             {
                 for (int j = 0; j < 18; j++)
                 {
-                    map[i, j].ImageIndex = gameMaps[stage, i, j];
+                    map[i, j].ImageIndex = gameMaps[i, j];
                 }
             }
         }
