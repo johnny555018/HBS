@@ -45,6 +45,7 @@
             this.player2MoveDown = new System.Windows.Forms.ImageList(this.components);
             this.player2MoveLeft = new System.Windows.Forms.ImageList(this.components);
             this.player2MoveRight = new System.Windows.Forms.ImageList(this.components);
+            this.itemImages = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
             // imageList1
@@ -235,6 +236,15 @@
             this.player2MoveRight.Images.SetKeyName(10, "slice24_24.png");
             this.player2MoveRight.Images.SetKeyName(11, "slice24_24.png");
             // 
+            // itemImages
+            // 
+            this.itemImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("itemImages.ImageStream")));
+            this.itemImages.TransparentColor = System.Drawing.Color.Transparent;
+            this.itemImages.Images.SetKeyName(0, "slice01_01.png");
+            this.itemImages.Images.SetKeyName(1, "Gift3_01.png");
+            this.itemImages.Images.SetKeyName(2, "slice01_01.png");
+            this.itemImages.Images.SetKeyName(3, "poison1.png");
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -270,6 +280,7 @@
         private System.Windows.Forms.ImageList player2MoveDown;
         private System.Windows.Forms.ImageList player2MoveLeft;
         private System.Windows.Forms.ImageList player2MoveRight;
+        private System.Windows.Forms.ImageList itemImages;
     }
 }
 
