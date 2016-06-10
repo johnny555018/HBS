@@ -29,6 +29,7 @@ namespace HBS_v1
         private int player2Power = 5;
         List<int> player2Keys = new List<int>();
 
+        Random rand = new Random();
         List<Label>bombsList = new List<Label>();   //for player1
         List<Label> bombsList2 = new List<Label>(); //for player2
         List<Label>fireList = new List<Label>();
@@ -116,14 +117,22 @@ namespace HBS_v1
             
         }
 
-        private void setMap(int stage)
+        private void spawnItem(int row, int col)
         {
-            for (int i = 0; i < 12; i++)
+            int tmp = rand.Next(20);
+            if (tmp < 9)
             {
-                for (int j = 0; j < 18; j++)
-                {
-                    map[i, j].ImageIndex = gameMaps[i, j];
-                }
+                int rnd = rand.Next(10);
+                if (rnd < 3)
+                    tmp = 0;
+                else if (rnd < 6)
+                    tmp = 1;
+                else if (rnd < 9)
+                    tmp = 2;
+                else
+                    tmp = 3;
+                map[row, col].ImageList = itemImages;
+                map[row, col].ImageIndex = tmp;
             }
         }
 
@@ -669,6 +678,7 @@ namespace HBS_v1
                                else if (map[j - index, k].ImageIndex == 1)   //炸到箱子
                                {
                                    map[j - index, k].ImageIndex = 0;    //加入道具掉落
+                                   spawnItem(j - index, k);
                                    break;
                                }
                                else if (map[j - index, k].ImageIndex == 2)   //炸到牆壁
@@ -695,6 +705,7 @@ namespace HBS_v1
                                else if (map[j + index, k].ImageIndex == 1)   //炸到箱子
                                {
                                    map[j + index, k].ImageIndex = 0;    //加入道具掉落
+                                   spawnItem(j + index, k);
                                    break;
                                }
                                else if (map[j + index, k].ImageIndex == 2)   //炸到牆壁
@@ -722,6 +733,7 @@ namespace HBS_v1
                                else if (map[j, k - index].ImageIndex == 1)   //炸到箱子
                                {
                                    map[j, k - index].ImageIndex = 0;    //加入道具掉落
+                                   spawnItem(j, k - index);
                                    break;
                                }
                                else if (map[j, k - index].ImageIndex == 2)   //炸到牆壁
@@ -749,6 +761,7 @@ namespace HBS_v1
                                else if (map[j, k + index].ImageIndex == 1)   //炸到箱子
                                {
                                    map[j, k + index].ImageIndex = 0;    //加入道具掉落
+                                   spawnItem(j, k + index);
                                    break;
                                }
                                else if (map[j, k + index].ImageIndex == 2)   //炸到牆壁
@@ -907,6 +920,7 @@ namespace HBS_v1
                                else if (map[j - index, k].ImageIndex == 1)   //炸到箱子
                                {
                                    map[j - index, k].ImageIndex = 0;    //加入道具掉落
+                                   spawnItem(j - index, k);
                                    break;
                                }
                                else if (map[j - index, k].ImageIndex == 2)   //炸到牆壁
@@ -933,6 +947,7 @@ namespace HBS_v1
                                else if (map[j + index, k].ImageIndex == 1)   //炸到箱子
                                {
                                    map[j + index, k].ImageIndex = 0;    //加入道具掉落
+                                   spawnItem(j + index, k);
                                    break;
                                }
                                else if (map[j + index, k].ImageIndex == 2)   //炸到牆壁
@@ -960,6 +975,7 @@ namespace HBS_v1
                                else if (map[j, k - index].ImageIndex == 1)   //炸到箱子
                                {
                                    map[j, k - index].ImageIndex = 0;    //加入道具掉落
+                                   spawnItem(j, k - index);
                                    break;
                                }
                                else if (map[j, k - index].ImageIndex == 2)   //炸到牆壁
@@ -987,6 +1003,7 @@ namespace HBS_v1
                                else if (map[j, k + index].ImageIndex == 1)   //炸到箱子
                                {
                                    map[j, k + index].ImageIndex = 0;    //加入道具掉落
+                                   spawnItem(j, k + index);
                                    break;
                                }
                                else if (map[j, k + index].ImageIndex == 2)   //炸到牆壁
