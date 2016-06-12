@@ -28,38 +28,28 @@ namespace HBS_v1
         private int player2Bombs = 0;
         private int player2Power = 5;
         List<int> player2Keys = new List<int>();
-
+        //global variable
         Random rand = new Random();
         List<Label>bombsList = new List<Label>();   //for player1
         List<Label> bombsList2 = new List<Label>(); //for player2
         List<Label>fireList = new List<Label>();
-
         Label[,] map = new Label[12, 18];
-        /*int[,,] gameMaps; = new int[,,] {{{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-                                          { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 }}};
-                                          */
+        bool twoPlayers = false;
         int[,] gameMaps = new int[12, 18];
 
         public Game(int players, bool monster, int mapnumber)
         {
             InitializeComponent();
+            player2.Hide();
             if (players == 2)   //set player 2
             {
+                twoPlayers = true;
                 player2.Top = 100;
                 player2.Left = 100;
                 player2.ImageList = player2MoveDown;
                 player2.ImageIndex = 0;
                 player2.BackColor = System.Drawing.Color.Transparent;
+                player2.Show();
             }
             string mapname = string.Format(@"{0}", "..\\..\\" + mapnumber + ".txt");
             using (TextReader reader = File.OpenText(mapname))
@@ -112,8 +102,6 @@ namespace HBS_v1
                     map[i, j].ImageIndex = gameMaps[i, j];
                 }
             }
-
-          //  setMap(0);
             
         }
 
@@ -163,25 +151,28 @@ namespace HBS_v1
                 }
             }
             //player2 move
-            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            if (twoPlayers == true)
             {
-                if (player2Keys.Count == 0)
+                if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
                 {
-                    player2Keys.Add(keyValue);
-                }
-                else
-                {
-                    bool flag = true;
-                    foreach (int k in player2Keys)
-                    {
-                        if (k == keyValue)
-                        {
-                            flag = false;
-                        }
-                    }
-                    if (flag)
+                    if (player2Keys.Count == 0)
                     {
                         player2Keys.Add(keyValue);
+                    }
+                    else
+                    {
+                        bool flag = true;
+                        foreach (int k in player2Keys)
+                        {
+                            if (k == keyValue)
+                            {
+                                flag = false;
+                            }
+                        }
+                        if (flag)
+                        {
+                            player2Keys.Add(keyValue);
+                        }
                     }
                 }
             }
@@ -207,23 +198,26 @@ namespace HBS_v1
                         bombsList.Add(map[i, j]);
                     }
                 }
-                if (Convert.ToBoolean(GetAsyncKeyState(Keys.RShiftKey)))
+                if (twoPlayers == true)
                 {
-                    if (player2Bombs < player2BombsMax) //還可以放炸彈
+                    if (Convert.ToBoolean(GetAsyncKeyState(Keys.RShiftKey)))
                     {
-                        int i, j;
-                        if (player2.Top % 40 < 20)
-                            i = player2.Top / 40;
-                        else
-                            i = player2.Top / 40 + 1;
-                        if (player2.Left % 40 < 20)
-                            j = player2.Left / 40;
-                        else
-                            j = player2.Left / 40 + 1;
-                        map[i, j].ImageList = bombImages;
-                        map[i, j].ImageIndex = 3;
-                        player2Bombs++;
-                        bombsList2.Add(map[i, j]);
+                        if (player2Bombs < player2BombsMax) //還可以放炸彈
+                        {
+                            int i, j;
+                            if (player2.Top % 40 < 20)
+                                i = player2.Top / 40;
+                            else
+                                i = player2.Top / 40 + 1;
+                            if (player2.Left % 40 < 20)
+                                j = player2.Left / 40;
+                            else
+                                j = player2.Left / 40 + 1;
+                            map[i, j].ImageList = bombImages;
+                            map[i, j].ImageIndex = 3;
+                            player2Bombs++;
+                            bombsList2.Add(map[i, j]);
+                        }
                     }
                 }
                 
