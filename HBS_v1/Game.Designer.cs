@@ -46,16 +46,17 @@
             this.player2MoveLeft = new System.Windows.Forms.ImageList(this.components);
             this.player2MoveRight = new System.Windows.Forms.ImageList(this.components);
             this.itemImages = new System.Windows.Forms.ImageList(this.components);
+            this.player1Die = new System.Windows.Forms.ImageList(this.components);
+            this.player2Die = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "bg.png");
-            this.imageList1.Images.SetKeyName(1, "SandBlockYellow.png");
-            this.imageList1.Images.SetKeyName(2, "SandStone.png");
-            this.imageList1.Images.SetKeyName(3, "man.png");
+            this.imageList1.Images.SetKeyName(0, "Ground1.png");
+            this.imageList1.Images.SetKeyName(1, "ground2-yellow.png");
+            this.imageList1.Images.SetKeyName(2, "ground2_stone.png");
             // 
             // timer1
             // 
@@ -66,9 +67,9 @@
             this.bombImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("bombImages.ImageStream")));
             this.bombImages.TransparentColor = System.Drawing.Color.Transparent;
             this.bombImages.Images.SetKeyName(0, "fire.png");
-            this.bombImages.Images.SetKeyName(1, "slice02_02.png");
-            this.bombImages.Images.SetKeyName(2, "slice03_03.png");
-            this.bombImages.Images.SetKeyName(3, "slice01_01.png");
+            this.bombImages.Images.SetKeyName(1, "water_ball_1.png");
+            this.bombImages.Images.SetKeyName(2, "water_ball_3.png");
+            this.bombImages.Images.SetKeyName(3, "water_ball_2.png");
             // 
             // timer2
             // 
@@ -80,7 +81,15 @@
             // 
             this.fireImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("fireImages.ImageStream")));
             this.fireImages.TransparentColor = System.Drawing.Color.Transparent;
-            this.fireImages.Images.SetKeyName(0, "fire.png");
+            this.fireImages.Images.SetKeyName(0, "waterbomb_mid.png");
+            this.fireImages.Images.SetKeyName(1, "waterbomb_up_mid.png");
+            this.fireImages.Images.SetKeyName(2, "waterbomb_up.png");
+            this.fireImages.Images.SetKeyName(3, "waterbomb_down_mid .png");
+            this.fireImages.Images.SetKeyName(4, "waterbomb_down.png");
+            this.fireImages.Images.SetKeyName(5, "waterbomb_left_mid.png");
+            this.fireImages.Images.SetKeyName(6, "waterbomb_left.png");
+            this.fireImages.Images.SetKeyName(7, "waterbomb_right_mid.png");
+            this.fireImages.Images.SetKeyName(8, "waterbomb_right.png");
             // 
             // player2
             // 
@@ -241,9 +250,41 @@
             this.itemImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("itemImages.ImageStream")));
             this.itemImages.TransparentColor = System.Drawing.Color.Transparent;
             this.itemImages.Images.SetKeyName(0, "slice01_01.png");
-            this.itemImages.Images.SetKeyName(1, "slice01_01.png");
-            this.itemImages.Images.SetKeyName(2, "Gift3_01.png");
-            this.itemImages.Images.SetKeyName(3, "poison1.png");
+            this.itemImages.Images.SetKeyName(1, "g2_shoe1_1.png");
+            this.itemImages.Images.SetKeyName(2, "g2_blue_1.png");
+            this.itemImages.Images.SetKeyName(3, "g2_poison1.png");
+            // 
+            // player1Die
+            // 
+            this.player1Die.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("player1Die.ImageStream")));
+            this.player1Die.TransparentColor = System.Drawing.Color.Transparent;
+            this.player1Die.Images.SetKeyName(0, "slice01_01.png");
+            this.player1Die.Images.SetKeyName(1, "slice02_02.png");
+            this.player1Die.Images.SetKeyName(2, "slice03_03.png");
+            this.player1Die.Images.SetKeyName(3, "slice04_04.png");
+            this.player1Die.Images.SetKeyName(4, "slice05_05.png");
+            this.player1Die.Images.SetKeyName(5, "slice06_06.png");
+            this.player1Die.Images.SetKeyName(6, "slice07_07.png");
+            this.player1Die.Images.SetKeyName(7, "slice08_08.png");
+            this.player1Die.Images.SetKeyName(8, "slice09_09.png");
+            this.player1Die.Images.SetKeyName(9, "slice10_10.png");
+            this.player1Die.Images.SetKeyName(10, "slice12_12.png");
+            // 
+            // player2Die
+            // 
+            this.player2Die.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("player2Die.ImageStream")));
+            this.player2Die.TransparentColor = System.Drawing.Color.Transparent;
+            this.player2Die.Images.SetKeyName(0, "slice01_01.png");
+            this.player2Die.Images.SetKeyName(1, "slice02_02.png");
+            this.player2Die.Images.SetKeyName(2, "slice03_03.png");
+            this.player2Die.Images.SetKeyName(3, "slice04_04.png");
+            this.player2Die.Images.SetKeyName(4, "slice05_05.png");
+            this.player2Die.Images.SetKeyName(5, "slice06_06.png");
+            this.player2Die.Images.SetKeyName(6, "slice07_07.png");
+            this.player2Die.Images.SetKeyName(7, "slice08_08.png");
+            this.player2Die.Images.SetKeyName(8, "slice09_09.png");
+            this.player2Die.Images.SetKeyName(9, "slice10_10.png");
+            this.player2Die.Images.SetKeyName(10, "slice12_12.png");
             // 
             // Game
             // 
@@ -256,6 +297,7 @@
             this.DoubleBuffered = true;
             this.Name = "Game";
             this.Text = "HBS";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Game_FormClosed);
             this.Load += new System.EventHandler(this.Game_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Game_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Game_KeyUp);
@@ -281,6 +323,8 @@
         private System.Windows.Forms.ImageList player2MoveLeft;
         private System.Windows.Forms.ImageList player2MoveRight;
         private System.Windows.Forms.ImageList itemImages;
+        private System.Windows.Forms.ImageList player1Die;
+        private System.Windows.Forms.ImageList player2Die;
     }
 }
 
