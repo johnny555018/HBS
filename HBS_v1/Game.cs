@@ -51,8 +51,8 @@ namespace HBS_v1
             if (players == 2)   //set player 2
             {
                 twoPlayers = true;
-                player2.Top = 100;
-                player2.Left = 100;
+                player2.Top = 440;
+                player2.Left = 680;
                 player2.ImageList = player2MoveDown;
                 player2.ImageIndex = 0;
                 player2.BackColor = System.Drawing.Color.Transparent;
@@ -261,7 +261,24 @@ namespace HBS_v1
                     player1.ImageIndex++;
                 else        //加入遊戲結束結果
                 {
-
+                    timer1.Enabled = false;
+                    if (twoPlayers == false)
+                    {
+                        var ko = MessageBox.Show("你屎了,新細明體><", "遊戲結束", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        if (ko == DialogResult.OK)
+                        {
+                            this.Close();
+                        }
+                    }
+                    else
+                    {
+                        var ko = MessageBox.Show("玩家1死掉了\n這場是玩家2的勝利!!!!!", "玩家2的勝利", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                        if (ko == DialogResult.OK)
+                        {
+                            this.Close();
+                        }
+                    }
+                    
                 }                    
             }
             else if (player1Keys.Count > 0)  //player1 move
@@ -405,7 +422,12 @@ namespace HBS_v1
                     player2.ImageIndex++;
                 else        //加入遊戲結束結果
                 {
-
+                    timer1.Enabled = false;
+                    var ko = MessageBox.Show("玩家2死掉了\n這場是玩家1的勝利!!!!!", "玩家1的勝利", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    if (ko == DialogResult.OK)
+                    {
+                        this.Close();
+                    }
                 }
             }
             else if (player2Keys.Count > 0)             //P2移動
