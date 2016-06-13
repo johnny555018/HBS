@@ -118,8 +118,10 @@ namespace HBS_v1
         private void startgame_button_Click(object sender, EventArgs e)
         {
             Game maingame = new Game(player, monsters, map_num);
-            maingame.Show();
             this.Hide();
+            maingame.ShowDialog();
+            this.Show();
+            this.set_panel.Visible = false;
         }
 
         private void back_button_Click(object sender, EventArgs e)

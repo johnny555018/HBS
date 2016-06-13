@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Media;
 
 namespace HBS_v1
 {
@@ -36,6 +37,12 @@ namespace HBS_v1
         Label[,] map = new Label[12, 18];
         bool twoPlayers = false;
         int[,] gameMaps = new int[12, 18];
+        private int GametimeMinute = 3;
+        private int GametimeSecond = 0;
+        SoundPlayer lay = new SoundPlayer("wav/lay.wav");
+        SoundPlayer eatItem = new SoundPlayer("wav/get.wav");
+        SoundPlayer explode = new SoundPlayer("wav/explode.wav");
+
 
         public Game(int players, bool monster, int mapnumber)
         {
@@ -50,6 +57,10 @@ namespace HBS_v1
                 player2.ImageIndex = 0;
                 player2.BackColor = System.Drawing.Color.Transparent;
                 player2.Show();
+                title_2p.Visible = true;
+                bomb_2p.Visible = true;
+                shoe_2p.Visible = true;
+                water_2p.Visible = true;
             }
             string mapname = string.Format(@"{0}", "..\\..\\" + mapnumber + ".txt");
             using (TextReader reader = File.OpenText(mapname))
@@ -183,6 +194,7 @@ namespace HBS_v1
                 {
                     if (player1Bombs < player1BombsMax && player1.ImageList != player1Die) //還可以放炸彈
                     {
+                        lay.Play();
                         int i, j;
                         if (player1.Top % 40 < 20)
                             i = player1.Top / 40;
@@ -204,6 +216,7 @@ namespace HBS_v1
                     {
                         if (player2Bombs < player2BombsMax && player2.ImageList != player2Die) //還可以放炸彈
                         {
+                            lay.Play();
                             int i, j;
                             if (player2.Top % 40 < 20)
                                 i = player2.Top / 40;
@@ -546,6 +559,7 @@ namespace HBS_v1
             }
             else if (map[a, b].ImageList == itemImages)     //吃到道具
             {
+                eatItem.Play();
                 if (map[a, b].ImageIndex == 0)      //水球
                 {
                     if (player1BombsMax < 7)
@@ -625,6 +639,7 @@ namespace HBS_v1
             }
             else if (map[a2, b2].ImageList == itemImages)     //吃到道具
             {
+                eatItem.Play();
                 if (map[a2, b2].ImageIndex == 0)      //水球
                 {
                     if (player2BombsMax < 7)
@@ -834,6 +849,7 @@ namespace HBS_v1
                 //       bombsList[i].ImageIndex--;
                    if (bombsList[i].ImageIndex == 0)//加入炸彈爆炸發生的事
                    {
+                       explode.Play();
                        player1Bombs--;  //已放炸彈減少
                        bombsList[i].ImageList = fireImages;
                        fireList.Add(bombsList[i]);
@@ -1127,6 +1143,7 @@ namespace HBS_v1
                 //       bombsList[i].ImageIndex--;
                    if (bombsList2[i].ImageIndex == 0)//加入炸彈爆炸發生的事
                    {
+                       explode.Play();
                        player2Bombs--;  //已放炸彈減少
                        bombsList2[i].ImageList = fireImages;
                        fireList.Add(bombsList2[i]);
@@ -1285,9 +1302,66 @@ namespace HBS_v1
 
        }
 
-       private void Game_FormClosed(object sender, FormClosedEventArgs e)
+       
+
+       private void gametimer_Tick(object sender, EventArgs e)
        {
-           Application.Exit();
-       }
+            second.Text = "0" + GametimeSecond.ToString();
+            minute.Text = "0" + GametimeMinute.ToString();
+
+            if (GametimeMinute == 0 && GametimeSecond < 30)
+            {
+                minute.ForeColor = Color.Red;
+                second.ForeColor = Color.Red;
+                mouhow.ForeColor = Color.Red;
+            }
+
+            if (GametimeSecond > 0)
+            {
+                GametimeSecond = GametimeSecond - 1;
+                if (GametimeSecond < 10)
+                {
+                    second.Text = "0" + GametimeSecond.ToString();
+                }
+                else
+                {
+                    second.Text = GametimeSecond.ToString();
+                }
+            }
+            else if (GametimeSecond == 0 && GametimeMinute > 0)
+            {
+                GametimeMinute = GametimeMinute - 1;
+                minute.Text = "0" + GametimeMinute.ToString();
+                GametimeSecond = 59;
+                second.Text = GametimeSecond.ToString();
+            }
+            else
+            {
+                // If the user ran out of time, stop the timer, show
+                // a MessageBox, and fill in the answers.
+                gametimer.Stop();
+                var ko = MessageBox.Show("時間到,遊戲結束><", "遊戲結束", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (ko == DialogResult.OK)
+                {
+                    this.Close();
+                }
+            }
+        }
+
+       private void exit_button_Click(object sender, EventArgs e)
+       {
+            gametimer.Enabled = false;
+            var decision = MessageBox.Show("你確定要中途離開這個遊戲嗎?", "跳game狗!!!", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (decision == DialogResult.Yes)
+            {
+                this.Close();
+            }
+            else
+            {
+                gametimer.Enabled = true;
+            }
+        }
+
+        
     }
 }

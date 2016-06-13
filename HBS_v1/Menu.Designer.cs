@@ -36,6 +36,9 @@
             this.instructions = new System.Windows.Forms.Label();
             this.close_button = new System.Windows.Forms.Label();
             this.set_panel = new System.Windows.Forms.Panel();
+            this.map_number = new System.Windows.Forms.Label();
+            this.right_button_map = new System.Windows.Forms.Label();
+            this.right_button_2P = new System.Windows.Forms.Label();
             this.right_button_1P = new System.Windows.Forms.Label();
             this.left_button_map = new System.Windows.Forms.Label();
             this.left_button_2P = new System.Windows.Forms.Label();
@@ -45,9 +48,6 @@
             this.label_2P = new System.Windows.Forms.Label();
             this.label_1P = new System.Windows.Forms.Label();
             this.startgame_button = new System.Windows.Forms.Label();
-            this.right_button_2P = new System.Windows.Forms.Label();
-            this.right_button_map = new System.Windows.Forms.Label();
-            this.map_number = new System.Windows.Forms.Label();
             this.set_panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +56,7 @@
             this.Title.BackColor = System.Drawing.Color.Transparent;
             this.Title.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.Title.Image = global::HBS_v1.Properties.Resources.menutitle;
-            this.Title.Location = new System.Drawing.Point(105, 24);
+            this.Title.Location = new System.Drawing.Point(107, 24);
             this.Title.Name = "Title";
             this.Title.Size = new System.Drawing.Size(292, 82);
             this.Title.TabIndex = 0;
@@ -111,12 +111,12 @@
             this.instructions.BackColor = System.Drawing.Color.Transparent;
             this.instructions.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.instructions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.instructions.Location = new System.Drawing.Point(27, 125);
+            this.instructions.Location = new System.Drawing.Point(23, 118);
             this.instructions.Name = "instructions";
-            this.instructions.Size = new System.Drawing.Size(462, 182);
+            this.instructions.Size = new System.Drawing.Size(467, 182);
             this.instructions.TabIndex = 5;
-            this.instructions.Text = "1P使用W A S D鍵控制方向 左Shift鍵放置炸彈\r\n2P使用上 下 左 右鍵控制方向 右Shift鍵放置炸彈\r\n將炸彈放置在磚塊的旁邊來炸掉磚塊\r\n磚塊被" +
-    "炸掉後或許會掉落神奇的道具!!\r\n道具可以改變角色或炸彈的性能ㄛ!!\r\n小心不要碰到怪獸和炸彈的燃燒範圍了\r\n不然就會死翹翹ㄉㄛ!!";
+            this.instructions.Text = "1P使用W A S D鍵控制方向, 左Shift鍵放置炸彈\r\n2P使用上 下 左 右鍵控制方向, 右Shift鍵放置炸彈\r\n將炸彈放置在磚塊的旁邊來炸掉磚塊\r\n磚" +
+    "塊被炸掉後有機會掉落道具道具\r\n可以改變角色或炸彈的性能!\r\n小心不要碰到怪獸和炸彈的爆炸範圍!\r\nps.吃到紫色炸彈會讓炸彈威力Max!";
             this.instructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.instructions.Visible = false;
             // 
@@ -147,11 +147,44 @@
             this.set_panel.Controls.Add(this.label_2P);
             this.set_panel.Controls.Add(this.label_1P);
             this.set_panel.Controls.Add(this.startgame_button);
-            this.set_panel.Location = new System.Drawing.Point(32, 12);
+            this.set_panel.Location = new System.Drawing.Point(26, 9);
             this.set_panel.Name = "set_panel";
             this.set_panel.Size = new System.Drawing.Size(457, 358);
             this.set_panel.TabIndex = 7;
             this.set_panel.Visible = false;
+            // 
+            // map_number
+            // 
+            this.map_number.AutoSize = true;
+            this.map_number.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.map_number.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.map_number.Location = new System.Drawing.Point(282, 173);
+            this.map_number.Name = "map_number";
+            this.map_number.Size = new System.Drawing.Size(36, 40);
+            this.map_number.TabIndex = 19;
+            this.map_number.Text = "1";
+            // 
+            // right_button_map
+            // 
+            this.right_button_map.BackColor = System.Drawing.Color.Transparent;
+            this.right_button_map.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.right_button_map.Image = global::HBS_v1.Properties.Resources.arrow_orange_right_p;
+            this.right_button_map.Location = new System.Drawing.Point(359, 160);
+            this.right_button_map.Name = "right_button_map";
+            this.right_button_map.Size = new System.Drawing.Size(67, 62);
+            this.right_button_map.TabIndex = 18;
+            this.right_button_map.Click += new System.EventHandler(this.right_button_map_Click);
+            // 
+            // right_button_2P
+            // 
+            this.right_button_2P.BackColor = System.Drawing.Color.Transparent;
+            this.right_button_2P.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.right_button_2P.Image = global::HBS_v1.Properties.Resources.arrow_orange_right_p;
+            this.right_button_2P.Location = new System.Drawing.Point(359, 85);
+            this.right_button_2P.Name = "right_button_2P";
+            this.right_button_2P.Size = new System.Drawing.Size(67, 62);
+            this.right_button_2P.TabIndex = 17;
+            this.right_button_2P.Click += new System.EventHandler(this.right_button_2P_Click);
             // 
             // right_button_1P
             // 
@@ -251,39 +284,6 @@
             this.startgame_button.Size = new System.Drawing.Size(288, 52);
             this.startgame_button.TabIndex = 8;
             this.startgame_button.Click += new System.EventHandler(this.startgame_button_Click);
-            // 
-            // right_button_2P
-            // 
-            this.right_button_2P.BackColor = System.Drawing.Color.Transparent;
-            this.right_button_2P.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.right_button_2P.Image = global::HBS_v1.Properties.Resources.arrow_orange_right_p;
-            this.right_button_2P.Location = new System.Drawing.Point(359, 85);
-            this.right_button_2P.Name = "right_button_2P";
-            this.right_button_2P.Size = new System.Drawing.Size(67, 62);
-            this.right_button_2P.TabIndex = 17;
-            this.right_button_2P.Click += new System.EventHandler(this.right_button_2P_Click);
-            // 
-            // right_button_map
-            // 
-            this.right_button_map.BackColor = System.Drawing.Color.Transparent;
-            this.right_button_map.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.right_button_map.Image = global::HBS_v1.Properties.Resources.arrow_orange_right_p;
-            this.right_button_map.Location = new System.Drawing.Point(359, 160);
-            this.right_button_map.Name = "right_button_map";
-            this.right_button_map.Size = new System.Drawing.Size(67, 62);
-            this.right_button_map.TabIndex = 18;
-            this.right_button_map.Click += new System.EventHandler(this.right_button_map_Click);
-            // 
-            // map_number
-            // 
-            this.map_number.AutoSize = true;
-            this.map_number.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.map_number.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.map_number.Location = new System.Drawing.Point(282, 173);
-            this.map_number.Name = "map_number";
-            this.map_number.Size = new System.Drawing.Size(36, 40);
-            this.map_number.TabIndex = 19;
-            this.map_number.Text = "1";
             // 
             // Menu
             // 
