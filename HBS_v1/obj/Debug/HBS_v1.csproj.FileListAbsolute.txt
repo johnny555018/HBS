@@ -55,3 +55,4 @@ C:\Users\Administrator\SE_project\HBS_final\HBS\HBS_v1\obj\Debug\HBS_v1.Menu.res
 C:\Users\Administrator\SE_project\HBS_final\HBS\HBS_v1\obj\Debug\HBS_v1.Game.resources
 C:\Users\Administrator\SE_project\HBS_final\HBS\HBS_v1\obj\Debug\HBS_v1.Properties.Resources.resources
 C:\Users\Administrator\SE_project\HBS_final\HBS\HBS_v1\obj\Debug\HBS_v1.csproj.GenerateResource.Cache
+C:\Users\Administrator\SE_project\HBS_final\HBS\HBS_v1\obj\Debug\HBS_v1.csprojResolveAssemblyReference.cache

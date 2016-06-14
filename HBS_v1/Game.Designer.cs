@@ -274,7 +274,7 @@
             // 
             this.itemImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("itemImages.ImageStream")));
             this.itemImages.TransparentColor = System.Drawing.Color.Transparent;
-            this.itemImages.Images.SetKeyName(0, "slice01_01.png");
+            this.itemImages.Images.SetKeyName(0, "bg_add_waterball1.png");
             this.itemImages.Images.SetKeyName(1, "g2_shoe1_1.png");
             this.itemImages.Images.SetKeyName(2, "g2_blue_1.png");
             this.itemImages.Images.SetKeyName(3, "g2_poison1.png");

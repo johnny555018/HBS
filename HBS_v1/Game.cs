@@ -35,7 +35,7 @@ namespace HBS_v1
         List<int> empty_Y = new List<int>();
         private int monster1Speed = 4;
         private int monster1Direction = 0;
-        bool monster1_exists = true;
+        bool monster1_exists = false;
         double monster1NextImageList = 0;
         const double monster1ImageListSpeed = 0.1;
 
@@ -47,6 +47,7 @@ namespace HBS_v1
         List<Label>fireList = new List<Label>();
         Label[,] map = new Label[12, 18];
         bool twoPlayers = false;
+        bool monsterGame = false;   //有怪物的模式
         int[,] gameMaps = new int[12, 18];
         private int GametimeMinute = 3;
         private int GametimeSecond = 0;
@@ -89,15 +90,17 @@ namespace HBS_v1
                     }
                 }
             }
-
-
+            monsterGame = monster;
+            monster1_exists = monster;
             if (monster)
             {
                 for (int i = 0; i < 12; ++i)
                 {
                     for (int j = 0; j < 18; ++j)
                     {
-                        if (gameMaps[i, j] == 0)
+                        if (gameMaps[i, j] == 0 && 
+                            ((i>1 && j>1) && (i<10 && j< 16))
+                         )
                         {
                             empty_X.Add(j);
                             empty_Y.Add(i);
@@ -117,6 +120,14 @@ namespace HBS_v1
 
         private void Game_Load(object sender, EventArgs e)
         {
+            //設定文字
+            shoe_1p.Text = "1";
+            shoe_2p.Text = "1";
+            water_1p.Text = "1";
+            water_2p.Text = "1";
+            bomb_1p.Text = "2";
+            bomb_2p.Text = "2";
+            //
             player1.BackColor = System.Drawing.Color.Transparent;
             timer1.Interval = 33;
             timer1.Enabled = true;
@@ -305,7 +316,7 @@ namespace HBS_v1
                             this.Close();
                         }
                     }
-                    else
+                    else if(monsterGame == false)
                     {
                         var ko = MessageBox.Show("玩家1死掉了\n這場是玩家2的勝利!!!!!", "玩家2的勝利", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                         if (ko == DialogResult.OK)
@@ -455,7 +466,7 @@ namespace HBS_v1
             {
                 if (player2.ImageIndex != 10)
                     player2.ImageIndex++;
-                else        //加入遊戲結束結果
+                else if(monsterGame == false)       //加入遊戲結束結果
                 {
                     timer1.Enabled = false;
                     var ko = MessageBox.Show("玩家2死掉了\n這場是玩家1的勝利!!!!!", "玩家1的勝利", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -599,18 +610,35 @@ namespace HBS_v1
                 }
             }
 
+            if (player1.ImageList == player1Die && player2.ImageList == player2Die && monsterGame == true)
+            {
+                timer1.Enabled = false;
+                var ko = MessageBox.Show("玩家死掉了\n這場是玩家的失敗!!!!!", "玩家的失敗", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                if (ko == DialogResult.OK)
+                {
+                    this.Close();
+                }
+            }
+
             //monster1
-            if (monster1.ImageList == monster1Die)        //M1被炸死
+            if (monster1.ImageList == monster1Die && monster1_exists)        //M1被炸死
             {
                 if (monster1.ImageIndex != 2)
                     monster1.ImageIndex++;
                 else        //加入遊戲結束結果
                 {
                     monster1_exists = false;
-                    monster1.Hide();
+                    monster1.Hide();                        
+                    timer1.Enabled = false;
+                    var ko = MessageBox.Show("怪物死掉了\n這場是玩家的勝利!!!!!", "玩家的勝利", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    if (ko == DialogResult.OK)
+                    {
+                        this.Close();
+                    }
+                
                 }
             }
-            else if (monster1_exists)             //M1移動
+            else             //M1移動
             {
                 int i, j;
                 const int UP_SIZE = 3,
@@ -624,11 +652,11 @@ namespace HBS_v1
                     case 0://up
                         if (monster1.ImageList != monster1MoveUp)
                             monster1.ImageList = monster1MoveUp;
-                        /*
-                        if (monster1.ImageIndex % UP_SIZE == 0)
-                            monster1.ImageIndex += UP_SIZE;
-                        monster1.ImageIndex--;
-                        */
+                        
+                        //if (monster1.ImageIndex % UP_SIZE == 0)
+                        //    monster1.ImageIndex += UP_SIZE;
+                        //monster1.ImageIndex--;
+                        
                         if (monster1NextImageList > UP_SIZE )
                             monster1NextImageList = 0;
                         monster1.ImageIndex = (int)monster1NextImageList;
@@ -680,11 +708,11 @@ namespace HBS_v1
                     case 1://down
                         if (monster1.ImageList != monster1MoveDown)
                             monster1.ImageList = monster1MoveDown;
-                        /*
-                        if (monster1.ImageIndex % DOWN_SIZE == 0)
-                            monster1.ImageIndex += DOWN_SIZE;
-                        monster1.ImageIndex--;
-                        */
+                        
+                        //if (monster1.ImageIndex % DOWN_SIZE == 0)
+                        //    monster1.ImageIndex += DOWN_SIZE;
+                        //monster1.ImageIndex--;
+                        
                         if (monster1NextImageList > DOWN_SIZE )
                             monster1NextImageList = 0;
                         monster1.ImageIndex = (int)monster1NextImageList;
@@ -736,11 +764,11 @@ namespace HBS_v1
                     case 2://left
                         if (monster1.ImageList != monster1MoveLeft)
                             monster1.ImageList = monster1MoveLeft;
-                        /*
-                        if (monster1.ImageIndex % LEFT_SIZE == 0)
-                            monster1.ImageIndex += LEFT_SIZE;
-                        monster1.ImageIndex--;
-                        */
+                        
+                        //if (monster1.ImageIndex % LEFT_SIZE == 0)
+                        //    monster1.ImageIndex += LEFT_SIZE;
+                        //monster1.ImageIndex--;
+                        
                         if (monster1NextImageList > LEFT_SIZE)
                             monster1NextImageList = 0;
                         monster1.ImageIndex = (int)monster1NextImageList;
@@ -792,11 +820,11 @@ namespace HBS_v1
                     case 3://right
                         if (monster1.ImageList != monster1MoveRight)
                             monster1.ImageList = monster1MoveRight;
-                        /*
-                        if (monster1.ImageIndex % RIGHT_SIZE == 0)
-                            monster1.ImageIndex += RIGHT_SIZE;
-                        monster1.ImageIndex--;
-                        */
+                        
+                        //if (monster1.ImageIndex % RIGHT_SIZE == 0)
+                        //    monster1.ImageIndex += RIGHT_SIZE;
+                        //monster1.ImageIndex--;
+                        
                         if (monster1NextImageList > RIGHT_SIZE )
                             monster1NextImageList = 0;
                         monster1.ImageIndex = (int)monster1NextImageList;
@@ -848,6 +876,7 @@ namespace HBS_v1
                 }
             }
 
+
             //定位monster1, for random Next
             if ((monster1.Top % 40 == 0) && (monster1.Left % 40 == 0))
             {
@@ -875,7 +904,10 @@ namespace HBS_v1
                 if (map[a, b].ImageIndex == 0)      //水球
                 {
                     if (player1BombsMax < 7)
+                    {
                         player1BombsMax++;
+                        bomb_1p.Text = Convert.ToString(player1BombsMax);
+                    }
                     map[a, b].ImageList = imageList1;
                     map[a, b].ImageIndex = 0;                    
                 }
@@ -883,6 +915,7 @@ namespace HBS_v1
                 {
                     if (player1Speed == 4)
                     {
+                        shoe_1p.Text = "2";
                         player1Speed = 8;
                         if (player1.Top % 8 != 0)
                         {
@@ -896,6 +929,7 @@ namespace HBS_v1
                     else if (player1Speed == 8)
                     {
                         player1Speed = 10;
+                        shoe_1p.Text = "3";
                         while (player1.Top % 10 != 0)
                         {
                             player1.Top++;
@@ -908,6 +942,7 @@ namespace HBS_v1
                     else if (player1Speed == 10)
                     {
                         player1Speed = 20;
+                        shoe_1p.Text = "4";
                         while (player1.Top % 20 != 0)
                         {
                             player1.Top++;
@@ -923,13 +958,17 @@ namespace HBS_v1
                 else if(map[a, b].ImageIndex == 2)      //藥水
                 {
                     if (player1Power < 7)
+                    {
                         player1Power++;
+                        water_1p.Text = Convert.ToString(player1Power);
+                    }
                     map[a, b].ImageList = imageList1;
                     map[a, b].ImageIndex = 0;
                 }
                 else if (map[a, b].ImageIndex == 3)      //MAX火力
                 {
                     player1Power = 7;
+                    water_1p.Text = Convert.ToString(player1Power);
                     map[a, b].ImageList = imageList1;
                     map[a, b].ImageIndex = 0;
                 }
@@ -956,7 +995,10 @@ namespace HBS_v1
                 if (map[a2, b2].ImageIndex == 0)      //水球
                 {
                     if (player2BombsMax < 7)
+                    {
                         player2BombsMax++;
+                        bomb_2p.Text = Convert.ToString(player2BombsMax);
+                    }
                     map[a2, b2].ImageList = imageList1;
                     map[a2, b2].ImageIndex = 0;
                 }
@@ -964,7 +1006,9 @@ namespace HBS_v1
                 {
                     if (player2Speed == 4)
                     {
+
                         player2Speed = 8;
+                        shoe_2p.Text = "2";
                         if (player2.Top % 8 != 0)
                         {
                             player2.Top += 4;
@@ -977,6 +1021,7 @@ namespace HBS_v1
                     else if (player2Speed == 8)
                     {
                         player2Speed = 10;
+                        shoe_2p.Text = "3";
                         while (player2.Top % 10 != 0)
                         {
                             player2.Top++;
@@ -989,6 +1034,7 @@ namespace HBS_v1
                     else if (player2Speed == 10)
                     {
                         player2Speed = 20;
+                        shoe_2p.Text = "4";
                         while (player2.Top % 20 != 0)
                         {
                             player2.Top++;
@@ -1004,13 +1050,17 @@ namespace HBS_v1
                 else if (map[a2, b2].ImageIndex == 2)      //藥水
                 {
                     if (player2Power < 7)
+                    {
                         player2Power++;
+                        water_2p.Text = Convert.ToString(player2Power);
+                    }
                     map[a2, b2].ImageList = imageList1;
                     map[a2, b2].ImageIndex = 0;
                 }
                 else if (map[a2, b2].ImageIndex == 3)      //MAX火力
                 {
                     player2Power = 7;
+                    water_2p.Text = Convert.ToString(player2Power);
                     map[a2, b2].ImageList = imageList1;
                     map[a2, b2].ImageIndex = 0;
                 }
@@ -1030,6 +1080,20 @@ namespace HBS_v1
             {
                 monster1.ImageList = monster1Die;
                 monster1.ImageIndex = 0;
+            }
+            //怪物撞到人
+            if (monster1_exists)
+            {
+                if (a == a3 && b == b3)
+                {
+                    player1.ImageList = player1Die;
+                    player1.ImageIndex = 0;
+                }
+                if (a2 == a3 && b2 == b3)
+                {
+                    player2.ImageList = player2Die;
+                    player2.ImageIndex = 0;
+                }
             }
         }
 

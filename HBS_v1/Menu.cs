@@ -31,6 +31,7 @@ namespace HBS_v1
             this.right_button_2P.Visible = false;
         }
 
+        // double player fight
         private void DPF_button_Click(object sender, EventArgs e)
         {
             player = 2;
