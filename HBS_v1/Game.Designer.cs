@@ -66,6 +66,12 @@
             this.minute = new System.Windows.Forms.Label();
             this.time_title = new System.Windows.Forms.Label();
             this.gametimer = new System.Windows.Forms.Timer(this.components);
+            this.monster1 = new System.Windows.Forms.Label();
+            this.monster1MoveUp = new System.Windows.Forms.ImageList(this.components);
+            this.monster1MoveDown = new System.Windows.Forms.ImageList(this.components);
+            this.monster1MoveLeft = new System.Windows.Forms.ImageList(this.components);
+            this.monster1MoveRight = new System.Windows.Forms.ImageList(this.components);
+            this.monster1Die = new System.Windows.Forms.ImageList(this.components);
             this.status_panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -516,12 +522,62 @@
             this.gametimer.Interval = 1000;
             this.gametimer.Tick += new System.EventHandler(this.gametimer_Tick);
             // 
+            // monster1
+            // 
+            this.monster1.BackColor = System.Drawing.Color.Transparent;
+            this.monster1.Image = ((System.Drawing.Image)(resources.GetObject("monster1.Image")));
+            this.monster1.Location = new System.Drawing.Point(0, 0);
+            this.monster1.Name = "monster1";
+            this.monster1.Size = new System.Drawing.Size(40, 40);
+            this.monster1.TabIndex = 3;
+            // 
+            // monster1MoveUp
+            // 
+            this.monster1MoveUp.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("monster1MoveUp.ImageStream")));
+            this.monster1MoveUp.TransparentColor = System.Drawing.Color.Transparent;
+            this.monster1MoveUp.Images.SetKeyName(0, "monster_up1.png");
+            this.monster1MoveUp.Images.SetKeyName(1, "monster_up2.png");
+            this.monster1MoveUp.Images.SetKeyName(2, "monster_up3.png");
+            // 
+            // monster1MoveDown
+            // 
+            this.monster1MoveDown.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("monster1MoveDown.ImageStream")));
+            this.monster1MoveDown.TransparentColor = System.Drawing.Color.Transparent;
+            this.monster1MoveDown.Images.SetKeyName(0, "monster_down1.png");
+            this.monster1MoveDown.Images.SetKeyName(1, "monster_down2.png");
+            this.monster1MoveDown.Images.SetKeyName(2, "monster_down3.png");
+            // 
+            // monster1MoveLeft
+            // 
+            this.monster1MoveLeft.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("monster1MoveLeft.ImageStream")));
+            this.monster1MoveLeft.TransparentColor = System.Drawing.Color.Transparent;
+            this.monster1MoveLeft.Images.SetKeyName(0, "monster1_left1.png");
+            this.monster1MoveLeft.Images.SetKeyName(1, "monster1_left2.png");
+            this.monster1MoveLeft.Images.SetKeyName(2, "monster1_left3.png");
+            // 
+            // monster1MoveRight
+            // 
+            this.monster1MoveRight.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("monster1MoveRight.ImageStream")));
+            this.monster1MoveRight.TransparentColor = System.Drawing.Color.Transparent;
+            this.monster1MoveRight.Images.SetKeyName(0, "monster1_right1.png");
+            this.monster1MoveRight.Images.SetKeyName(1, "monster1_right2.png");
+            this.monster1MoveRight.Images.SetKeyName(2, "monster1_right3.png");
+            // 
+            // monster1Die
+            // 
+            this.monster1Die.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("monster1Die.ImageStream")));
+            this.monster1Die.TransparentColor = System.Drawing.Color.Transparent;
+            this.monster1Die.Images.SetKeyName(0, "monster1_die1.png");
+            this.monster1Die.Images.SetKeyName(1, "monster1_die2.png");
+            this.monster1Die.Images.SetKeyName(2, "monster1_die3.png");
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(884, 481);
+            this.Controls.Add(this.monster1);
             this.Controls.Add(this.status_panel);
             this.Controls.Add(this.player2);
             this.Controls.Add(this.player1);
@@ -575,6 +631,12 @@
         private System.Windows.Forms.Label shoe_1p;
         private System.Windows.Forms.Label bomb_1p;
         private System.Windows.Forms.Timer gametimer;
+        private System.Windows.Forms.Label monster1;
+        private System.Windows.Forms.ImageList monster1MoveUp;
+        private System.Windows.Forms.ImageList monster1MoveDown;
+        private System.Windows.Forms.ImageList monster1MoveLeft;
+        private System.Windows.Forms.ImageList monster1MoveRight;
+        private System.Windows.Forms.ImageList monster1Die;
     }
 }
 

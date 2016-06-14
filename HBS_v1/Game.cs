@@ -29,6 +29,17 @@ namespace HBS_v1
         private int player2Bombs = 0;
         private int player2Power = 1;
         List<int> player2Keys = new List<int>();
+
+        //monster1
+        List<int> empty_X = new List<int>();
+        List<int> empty_Y = new List<int>();
+        private int monster1Speed = 4;
+        private int monster1Direction = 0;
+        bool monster1_exists = true;
+        double monster1NextImageList = 0;
+        const double monster1ImageListSpeed = 0.1;
+
+
         //global variable
         Random rand = new Random();
         List<Label>bombsList = new List<Label>();   //for player1
@@ -48,6 +59,7 @@ namespace HBS_v1
         {
             InitializeComponent();
             player2.Hide();
+            monster1.Hide();
             if (players == 2)   //set player 2
             {
                 twoPlayers = true;
@@ -78,6 +90,29 @@ namespace HBS_v1
                 }
             }
 
+
+            if (monster)
+            {
+                for (int i = 0; i < 12; ++i)
+                {
+                    for (int j = 0; j < 18; ++j)
+                    {
+                        if (gameMaps[i, j] == 0)
+                        {
+                            empty_X.Add(j);
+                            empty_Y.Add(i);
+                        }
+                    }
+                }
+                int tmpt = rand.Next(0, empty_X.Count - 1);
+
+                monster1.Left = empty_X[tmpt] * 40;
+                monster1.Top = empty_Y[tmpt] * 40;
+                monster1Direction = 1;//down
+                monster1.ImageList = monster1MoveDown;
+                monster1.ImageIndex = 0;
+                monster1.Show();
+            }
         }
 
         private void Game_Load(object sender, EventArgs e)
@@ -564,6 +599,261 @@ namespace HBS_v1
                 }
             }
 
+            //monster1
+            if (monster1.ImageList == monster1Die)        //M1被炸死
+            {
+                if (monster1.ImageIndex != 2)
+                    monster1.ImageIndex++;
+                else        //加入遊戲結束結果
+                {
+                    monster1_exists = false;
+                    monster1.Hide();
+                }
+            }
+            else if (monster1_exists)             //M1移動
+            {
+                int i, j;
+                const int UP_SIZE = 3,
+                    DOWN_SIZE = 3,
+                    LEFT_SIZE = 3,
+                    RIGHT_SIZE = 3;
+                i = monster1.Top / 40;
+                j = monster1.Left / 40;
+                switch (monster1Direction)
+                {
+                    case 0://up
+                        if (monster1.ImageList != monster1MoveUp)
+                            monster1.ImageList = monster1MoveUp;
+                        /*
+                        if (monster1.ImageIndex % UP_SIZE == 0)
+                            monster1.ImageIndex += UP_SIZE;
+                        monster1.ImageIndex--;
+                        */
+                        if (monster1NextImageList > UP_SIZE )
+                            monster1NextImageList = 0;
+                        monster1.ImageIndex = (int)monster1NextImageList;
+                        monster1NextImageList += monster1ImageListSpeed;
+                         
+                        if (monster1.Top > 0)
+                        {
+                            if (monster1.Top % 40 == 0 &&
+                                map[i - 1, j].ImageList == bombImages)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Top % 40 == 0 &&
+                                map[i - 1, j].ImageList == imageList1 &&
+                                map[i - 1, j].ImageIndex >= 1)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Top % 40 == 0 &&
+                                monster1.Left % 40 > 0 &&
+                                map[i - 1, j + 1].ImageList == bombImages)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Top % 40 == 0 &&
+                                monster1.Left % 40 > 0 &&
+                                map[i - 1, j + 1].ImageList == imageList1 &&
+                                map[i - 1, j + 1].ImageIndex >= 1)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            monster1.Top -= monster1Speed;
+                        }
+                        else
+                        {
+                            monster1.Top = 0;
+                            monster1Direction = rand.Next(0, 4);
+                            monster1.ImageIndex = 0;
+                        }
+                        break;
+                    case 1://down
+                        if (monster1.ImageList != monster1MoveDown)
+                            monster1.ImageList = monster1MoveDown;
+                        /*
+                        if (monster1.ImageIndex % DOWN_SIZE == 0)
+                            monster1.ImageIndex += DOWN_SIZE;
+                        monster1.ImageIndex--;
+                        */
+                        if (monster1NextImageList > DOWN_SIZE )
+                            monster1NextImageList = 0;
+                        monster1.ImageIndex = (int)monster1NextImageList;
+                        monster1NextImageList += monster1ImageListSpeed;
+                         
+                        if (monster1.Top < 440)
+                        {
+                            if (monster1.Top % 40 == 0 &&
+                                map[i + 1, j].ImageList == bombImages)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Top % 40 == 0 &&
+                                map[i + 1, j].ImageList == imageList1 &&
+                                map[i + 1, j].ImageIndex >= 1)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Top % 40 == 0 &&
+                                monster1.Left % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == bombImages)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Top % 40 == 0 &&
+                                monster1.Left % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == imageList1 &&
+                                map[i + 1, j + 1].ImageIndex >= 1)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            monster1.Top += monster1Speed;
+                        }
+                        else
+                        {
+                            monster1.Top = 440;
+                            monster1Direction = rand.Next(0, 4);
+                            monster1.ImageIndex = 0;
+                        }
+                        break;
+                    case 2://left
+                        if (monster1.ImageList != monster1MoveLeft)
+                            monster1.ImageList = monster1MoveLeft;
+                        /*
+                        if (monster1.ImageIndex % LEFT_SIZE == 0)
+                            monster1.ImageIndex += LEFT_SIZE;
+                        monster1.ImageIndex--;
+                        */
+                        if (monster1NextImageList > LEFT_SIZE)
+                            monster1NextImageList = 0;
+                        monster1.ImageIndex = (int)monster1NextImageList;
+                        monster1NextImageList += monster1ImageListSpeed;
+                         
+                        if (monster1.Left > 0)
+                        {
+                            if (monster1.Left % 40 == 0 &&
+                                map[i, j - 1].ImageList == bombImages)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Left % 40 == 0 &&
+                                map[i, j - 1].ImageList == imageList1 &&
+                                map[i, j - 1].ImageIndex >= 1)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Left % 40 == 0 &&
+                                monster1.Top % 40 > 0 &&
+                                map[i + 1, j - 1].ImageList == bombImages)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Left % 40 == 0 &&
+                                monster1.Top % 40 > 0 &&
+                                map[i + 1, j - 1].ImageList == imageList1 &&
+                                map[i + 1, j - 1].ImageIndex >= 1)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            monster1.Left -= monster1Speed;
+                        }
+                        else
+                        {
+                            monster1.Left = 0;
+                            monster1Direction = rand.Next(0, 4);
+                            monster1.ImageIndex = 0;
+                        }
+                        break;
+                    case 3://right
+                        if (monster1.ImageList != monster1MoveRight)
+                            monster1.ImageList = monster1MoveRight;
+                        /*
+                        if (monster1.ImageIndex % RIGHT_SIZE == 0)
+                            monster1.ImageIndex += RIGHT_SIZE;
+                        monster1.ImageIndex--;
+                        */
+                        if (monster1NextImageList > RIGHT_SIZE )
+                            monster1NextImageList = 0;
+                        monster1.ImageIndex = (int)monster1NextImageList;
+                        monster1NextImageList += monster1ImageListSpeed;
+                         
+                        if (monster1.Left < 680)
+                        {
+                            if (monster1.Left % 40 == 0 &&
+                                map[i, j + 1].ImageList == bombImages)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Left % 40 == 0 &&
+                                map[i, j + 1].ImageList == imageList1 &&
+                                map[i, j + 1].ImageIndex >= 1)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Left % 40 == 0 &&
+                                monster1.Top % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == bombImages)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            if (monster1.Left % 40 == 0 &&
+                                monster1.Top % 40 > 0 &&
+                                map[i + 1, j + 1].ImageList == imageList1 &&
+                                map[i + 1, j + 1].ImageIndex >= 1)
+                            {
+                                monster1Direction = rand.Next(0, 4);
+                                monster1.ImageIndex = 0;
+                                break;
+                            }
+                            monster1.Left += monster1Speed;
+                        }
+                        else
+                        {
+                            monster1.Left = 680;
+                            monster1Direction = rand.Next(0, 4);
+                            monster1.ImageIndex = 0;
+                        }
+                        break;
+                }
+            }
+
+            //定位monster1, for random Next
+            if ((monster1.Top % 40 == 0) && (monster1.Left % 40 == 0))
+            {
+                monster1Direction = rand.Next(0, 4);
+            }
+
             //定位player1
             int a, b;
             if (player1.Top % 40 < 20)
@@ -644,6 +934,7 @@ namespace HBS_v1
                     map[a, b].ImageIndex = 0;
                 }
             }
+
             //定位player2
             int a2, b2;
             if (player2.Top % 40 < 20)
@@ -723,6 +1014,22 @@ namespace HBS_v1
                     map[a2, b2].ImageList = imageList1;
                     map[a2, b2].ImageIndex = 0;
                 }
+            }
+
+            //定位monster1
+            int a3, b3;
+            if (monster1.Top % 40 < 20)
+                a3 = monster1.Top / 40;
+            else
+                a3 = monster1.Top / 40 + 1;
+            if (monster1.Left % 40 < 20)
+                b3 = monster1.Left / 40;
+            else
+                b3 = monster1.Left / 40 + 1;
+            if (map[a3, b3].ImageList == fireImages && monster1.ImageList != monster1Die) //P2被炸死了
+            {
+                monster1.ImageList = monster1Die;
+                monster1.ImageIndex = 0;
             }
         }
 
